@@ -56,8 +56,8 @@ abstract class AbstractRobot (
         x += Math.sin(theta) * dv * dt
         y += Math.cos(theta) * dv * dt
 
-        leftDist += left * maxVelocity * dt
-        rightDist += right * maxVelocity * dt
+        leftDist += leftWheel * maxVelocity * dt
+        rightDist += rightWheel * maxVelocity * dt
     }
 
     final private fun getLeftDistance(): Double = leftDist
