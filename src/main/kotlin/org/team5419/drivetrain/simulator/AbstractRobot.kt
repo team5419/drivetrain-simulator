@@ -36,7 +36,7 @@ abstract class AbstractRobot (
         if(left == right) {
             dtheta = 0.0
         } else if(right == -left) {
-            dtheta = right * maxVelocity / wheelBase
+            dtheta = left * maxVelocity / wheelBase * dt
         } else if(left != right) {
             val r = wheelBase * (left + right) / 2 / Math.abs(left - right) //turn radius
             val dist = dv * 0.01

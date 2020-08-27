@@ -9,11 +9,11 @@ object Robot : AbstractRobot(
 
     override fun robotInit() {
         println("init")
-        setPercent(1.0, 0.5)
+        setPercent(0.5, -0.5)
     }
     
-    override fun robotPeriodic(){
-        
+    override fun robotPeriodic() {
+
     }
 
 }

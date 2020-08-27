@@ -24,7 +24,7 @@ class EditorWindow : JFrame() {
     val feildPanel = Renderer();
 
     private fun launchUI() {
-        setTitle("Berkeley Path")
+        setTitle("Drivetrain Simulator")
         setSize(1280,720)
 
         defaultCloseOperation = JFrame.EXIT_ON_CLOSE

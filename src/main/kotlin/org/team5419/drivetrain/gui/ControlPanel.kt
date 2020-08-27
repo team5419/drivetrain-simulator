@@ -31,7 +31,7 @@ class ControlPanel(): JPanel() {
         gbc.anchor = GridBagConstraints.NORTH;
         xLabel = addOutput("X: ")
         yLabel = addOutput("Y: ")
-        thetaLabel = addOutput("Theta: ")
+        thetaLabel = addOutput("θ: ")
         leftLabel = addOutput("Left: ")
         rightLabel = addOutput("Right: ")
 
@@ -52,7 +52,7 @@ class ControlPanel(): JPanel() {
     fun update() {
         xLabel.setText("%.${3}f".format(Robot.x))
         yLabel.setText("%.${3}f".format(Robot.y))
-        thetaLabel.setText("%.${3}f".format(Robot.theta))
+        thetaLabel.setText("%.${3}f".format(Robot.theta / Math.PI * 180))
         leftLabel.setText("%.${3}f".format(Robot.leftWheel))
         rightLabel.setText("%.${3}f".format(Robot.rightWheel))
     }
