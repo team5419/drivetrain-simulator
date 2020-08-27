@@ -12,7 +12,7 @@ object Robot : AbstractRobot(
     }
     
     override fun robotPeriodic() {
-
+        
     }
 
 }

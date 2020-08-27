@@ -19,11 +19,13 @@ abstract class AbstractRobot (
 
     public val dt = 0.01
 
+    private var leftDist = 0.0
+    private var rightDist = 0.0
+
     init{
         x = startX
         y = startY
         theta = startTheta
-
         robotInit()
     }
 
@@ -54,7 +56,12 @@ abstract class AbstractRobot (
         x += Math.sin(theta) * dv * dt
         y += Math.cos(theta) * dv * dt
 
+        leftDist += left * maxVelocity * dt
+        rightDist += right * maxVelocity * dt
     }
+
+    final private fun getLeftDistance(): Double = leftDist
+    final private fun getRightDistance(): Double = rightDist
 
     abstract fun robotInit()
 
