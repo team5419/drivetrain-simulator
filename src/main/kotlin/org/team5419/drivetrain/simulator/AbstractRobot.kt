@@ -42,10 +42,8 @@ abstract class AbstractRobot (
             val dist = dv * 0.01
             val h = Math.sqrt(r*r - dist*dist/4)
             dtheta = 2 * Math.atan(dist/2/h)
-            println(" " + r + " " + h + " " + dist)
 
         }
-        println(dtheta)
     }
 
     public final fun update() {
@@ -56,7 +54,6 @@ abstract class AbstractRobot (
         x += Math.sin(theta) * dv * dt
         y += Math.cos(theta) * dv * dt
 
-        // println("x: " + x + " y: " + y + " theta: " + theta)
     }
 
     abstract fun robotInit()

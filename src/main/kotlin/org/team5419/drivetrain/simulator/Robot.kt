@@ -8,7 +8,6 @@ object Robot : AbstractRobot(
 ) {
 
     override fun robotInit() {
-        println("init")
         setPercent(0.5, -0.5)
     }
     

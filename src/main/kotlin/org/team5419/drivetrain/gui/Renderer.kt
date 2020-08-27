@@ -32,7 +32,6 @@ class Renderer(): JPanel() {
         }
 
     init{
-        // println("init")
         // val listener = object: ActionListener {
         //     override fun actionPerformed(evt: ActionEvent){
         //         update()
@@ -84,9 +83,6 @@ class Renderer(): JPanel() {
                 (Robot.x + Math.sin(Robot.theta) * 20).toInt(),
                 (Robot.y + Math.cos(Robot.theta) * 20).toInt()
             )
-
-
         }
     }
-
 }
