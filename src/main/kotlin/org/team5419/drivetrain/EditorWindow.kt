@@ -21,7 +21,7 @@ import java.util.logging.Handler
 class EditorWindow : JFrame() {
 
     val controlPanel = ControlPanel();
-    val feildPanel = Renderer();
+    val feildPanel = FeildPanel();
 
     private fun launchUI() {
         setTitle("Drivetrain Simulator")

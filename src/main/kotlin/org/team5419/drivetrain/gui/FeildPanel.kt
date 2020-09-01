@@ -14,38 +14,40 @@ class FeildPanel(): JPanel() {
     /**
      * The path renderer being rendered.
      */
-    public val pathRenderer = Renderer();
+    public val renderer = Renderer();
+
     val scrollPane = JScrollPane();
     val bottomPane = JPanel();
 
-    // val zoomInBtn = JButton("+")
-    // val zoomOutBtn = JButton("-")
+    val zoomInBtn = JButton("+")
+    val zoomOutBtn = JButton("-")
 
-    val zoomIncriment = 0.5f;
+    val zoomIncriment = 0.85f;
 
     init {
         this.layout = BorderLayout();
 
-        scrollPane.setViewportView(pathRenderer);
+        scrollPane.setViewportView(renderer);
         this.add(scrollPane, BorderLayout.CENTER)
 
-        // zoomOutBtn.addActionListener(object: ActionListener {
-        //     override fun actionPerformed(e: ActionEvent) {
-        //         pathRenderer.zoomLevel *= zoomIncriment;
-        //         scrollPane.revalidate()
-        //     }
-        // })
+        zoomOutBtn.addActionListener(object: ActionListener {
+            override fun actionPerformed(e: ActionEvent) {
+                renderer.zoomLevel *= zoomIncriment;
+                scrollPane.revalidate()
+            }
+        })
 
-        // zoomInBtn.addActionListener(object: ActionListener {
-        //     override fun actionPerformed(e: ActionEvent) {
-        //         pathRenderer.zoomLevel /= zoomIncriment;
-        //         scrollPane.revalidate()
-        //     }
-        // })
+        zoomInBtn.addActionListener(object: ActionListener {
+            override fun actionPerformed(e: ActionEvent) {
+                renderer.zoomLevel /= zoomIncriment;
+                scrollPane.revalidate()
+            }
+        })
 
-        // bottomPane.add(zoomInBtn)
-        // bottomPane.add(zoomOutBtn)
-        // this.add(bottomPane, BorderLayout.SOUTH)
+        bottomPane.add(zoomInBtn)
+        bottomPane.add(zoomOutBtn)
+        this.add(bottomPane, BorderLayout.SOUTH)
     }
 
+    public fun update() = renderer.update()
 }

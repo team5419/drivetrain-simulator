@@ -8,11 +8,11 @@ object Robot : AbstractRobot(
 ) {
 
     override fun robotInit() {
-        setPercent(0.5, -0.5)
-    }
-    
-    override fun robotPeriodic() {
         
     }
+    
 
+    override fun robotPeriodic() {
+
+    }
 }
