@@ -71,13 +71,10 @@ abstract class AbstractRobot (
         rightDist += velocity * dt
     }
 
-    final private fun getLeftDistance(): Double = leftDist
-    final private fun getRightDistance(): Double = rightDist
-
     abstract fun robotInit()
 
     abstract fun robotPeriodic()
 
-    protected fun getLeftDistance(): Double = leftDist
-    protected fun getRightDistance(): Double = rightDist
+    final protected fun getLeftDistance(): Double = leftDist
+    final protected fun getRightDistance(): Double = rightDist
 }
