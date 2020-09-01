@@ -16,7 +16,7 @@ import javax.swing.*
 import java.util.logging.Handler
 
 /**
- * Renders and manages the state of the main editor.
+ * Renders and manages the state of the main editor.f
  */
 class EditorWindow : JFrame() {
 
