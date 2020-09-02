@@ -33,20 +33,12 @@ class Renderer(): JPanel(), MouseListener, MouseMotionListener {
     var startDrag: Point? = null
     var offset: Point = Point(0,0)
 
-    public var zoomLevel = 1.0
+    private var zoomLevel = 1.0
         set(value) {
             field = value;
             println(value)
-            // repaint();
-
-            // this.setPreferredSize(
-            //     Dimension(
-            //         (initialSize.getWidth() * zoomLevel).toInt(),
-            //         (initialSize.getHeight() * zoomLevel).toInt()
-            //     )
-            // )
-            // revalidate()
         }
+    public val zoomIncriment = 0.85f;
 
     public var xOffset = 0.0
     public var yOffset = 0.0
@@ -62,11 +54,13 @@ class Renderer(): JPanel(), MouseListener, MouseMotionListener {
         repaint()
     }
 
+    public fun zoomIn(){ zoomLevel *= zoomIncriment }
+    public fun zoomOut() { zoomLevel /= zoomIncriment }
+
     override fun mouseMoved(e: MouseEvent){}
     override fun mouseEntered(e: MouseEvent){}
     override fun mouseClicked(e: MouseEvent){}
     override fun mouseExited(e: MouseEvent){}
-
 
     override fun mousePressed(e: MouseEvent) {
         startDrag = e.getPoint()

@@ -2,26 +2,25 @@ package org.team5419.drivetrain.gui
 
 import org.team5419.drivetrain.simulator.Robot
 import java.awt.*
-
-import javax.swing.JPanel
-import javax.swing.JLabel
-import javax.swing.JTextField
-import javax.swing.JFormattedTextField
-import javax.swing.InputVerifier
-import javax.swing.JComponent
+import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
+import javax.swing.*
 
 import javax.swing.border.EmptyBorder
 
 
-class ControlPanel(): JPanel() {
+class ControlPanel(renderer: Renderer): JPanel() {
 
-    val gbc = GridBagConstraints()
-    val xLabel: JLabel
-    val yLabel: JLabel
-    val velLabel: JLabel
-    val thetaLabel: JLabel
-    val leftLabel: JLabel
-    val rightLabel: JLabel
+    private val gbc = GridBagConstraints()
+    private val xLabel: JLabel
+    private val yLabel: JLabel
+    private val velLabel: JLabel
+    private val thetaLabel: JLabel
+    private val leftLabel: JLabel
+    private val rightLabel: JLabel
+
+    private val zoomInButton: JButton = JButton("+")
+    private val zoomOutButton: JButton = JButton("-")
 
 
     init{
@@ -35,11 +34,25 @@ class ControlPanel(): JPanel() {
         leftLabel = addOutput("Left: ")
         rightLabel = addOutput("Right: ")
 
+        this.add(JPanel().apply {
+            layout = GridLayout(1,2, 10, 10)
+            add(zoomInButton)
+            add(zoomOutButton)
+        })
+
         update()
+
+        zoomOutButton.addActionListener {
+            renderer.zoomOut()
+        }
+
+        zoomInButton.addActionListener {
+            renderer.zoomIn()
+        }
 
     }
 
-    fun addOutput(titleStr: String): JLabel{
+    private fun addOutput(titleStr: String): JLabel{
         val label: JLabel = JLabel("")
         this.add( JPanel().apply{
             add(JLabel(titleStr), BorderLayout.LINE_START)
