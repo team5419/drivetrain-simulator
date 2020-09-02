@@ -21,6 +21,7 @@ class ControlPanel(): JPanel() {
     val gbc = GridBagConstraints()
     val xLabel: JLabel
     val yLabel: JLabel
+    val velLabel: JLabel
     val thetaLabel: JLabel
     val leftLabel: JLabel
     val rightLabel: JLabel
@@ -31,6 +32,7 @@ class ControlPanel(): JPanel() {
         gbc.anchor = GridBagConstraints.NORTH;
         xLabel = addOutput("X: ")
         yLabel = addOutput("Y: ")
+        velLabel = addOutput("Velocity: ")
         thetaLabel = addOutput("θ: ")
         leftLabel = addOutput("Left: ")
         rightLabel = addOutput("Right: ")
@@ -52,6 +54,7 @@ class ControlPanel(): JPanel() {
     fun update() {
         xLabel.setText("%.${3}f".format(Robot.x))
         yLabel.setText("%.${3}f".format(Robot.y))
+        velLabel.setText("%.${3}f".format(Robot.velocity))
         thetaLabel.setText("%.${3}f".format(Robot.theta / Math.PI * 180))
         leftLabel.setText("%.${3}f".format(Robot.leftWheel))
         rightLabel.setText("%.${3}f".format(Robot.rightWheel))
