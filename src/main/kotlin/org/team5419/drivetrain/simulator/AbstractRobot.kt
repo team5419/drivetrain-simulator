@@ -1,6 +1,6 @@
 package org.team5419.drivetrain.simulator
 
-import kotlin.math.sign
+import kotlin.math.*
 
 abstract class AbstractRobot (
     val wheelBase: Double, //pixels
@@ -10,25 +10,23 @@ abstract class AbstractRobot (
     startY: Double = 0.0,
     startTheta: Double = 0.0
 ) {
-    public var x: Double
-    public var y: Double
+    var x: Double = startX
+    var y: Double = startY
+    var theta: Double = startTheta
 
-    public var theta: Double
     private var dtheta: Double = 0.0
     private var targetVelocity: Double = 0.0
-    public var velocity: Double = 0.0
+    var velocity: Double = 0.0
 
-    public var leftWheel: Double = 0.0
-    public var rightWheel: Double = 0.0
+    var leftWheel: Double = 0.0
+    var rightWheel: Double = 0.0
 
+    val dt = 0.05
 
-    public val dt = 0.05
-
-    protected var leftDist = 0.0
-    protected var rightDist = 0.0
+    private var leftDist = 0.0
+    private var rightDist = 0.0
 
     init{
-        x = startX
         y = startY
         theta = startTheta
         robotInit()
@@ -46,26 +44,25 @@ abstract class AbstractRobot (
         } else if(rightWheel == -leftWheel) {
             dtheta = leftWheel * maxVelocity / wheelBase * dt
         } else if(leftWheel != rightWheel) {
-            val r = wheelBase * (leftWheel + rightWheel) / 2 / Math.abs(leftWheel - rightWheel) //turn radius
+            val r = wheelBase * (leftWheel + rightWheel) / 2 / abs(leftWheel - rightWheel) //turn radius
             val dist = targetVelocity * dt
-            val h = Math.sqrt(r*r - dist*dist/4)
-            dtheta = 2 * Math.atan(dist/2/h)
+            val h = sqrt(r*r - dist*dist/4)
+            dtheta = 2 * atan(dist/2/h)
 
         }
     }
 
-    public final fun update() {
+    final fun update() {
         robotPeriodic()
 
         theta += dtheta
-        theta = theta % (Math.PI * 2)
-        println("%.${3}f %.${3}f".format(targetVelocity, velocity))
+        theta %= (Math.PI * 2)
 
-        velocity += Math.min(acceleration, Math.abs(targetVelocity - velocity)) * dt * sign(targetVelocity - velocity)
+        velocity += acceleration.coerceAtMost(abs(targetVelocity - velocity)) * dt * sign(targetVelocity - velocity)
         velocity = velocity.coerceIn(-maxVelocity, maxVelocity)
 
-        x += Math.sin(theta) * velocity * dt
-        y += Math.cos(theta) * velocity * dt
+        x += sin(theta) * velocity * dt
+        y += cos(theta) * velocity * dt
 
         leftDist += velocity * dt
         rightDist += velocity * dt
@@ -75,6 +72,7 @@ abstract class AbstractRobot (
 
     abstract fun robotPeriodic()
 
-    final protected fun getLeftDistance(): Double = leftDist
-    final protected fun getRightDistance(): Double = rightDist
+    protected fun getLeftDistance(): Double = leftDist
+    protected fun getRightDistance(): Double = rightDist
+    protected fun getHeading(): Double = theta
 }
