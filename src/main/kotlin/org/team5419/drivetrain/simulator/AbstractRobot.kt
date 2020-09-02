@@ -72,7 +72,8 @@ abstract class AbstractRobot (
 
     abstract fun robotPeriodic()
 
-    protected fun getLeftDistance(): Double = leftDist
-    protected fun getRightDistance(): Double = rightDist
-    protected fun getHeading(): Double = theta
+    fun getLeftDistance(): Double = leftDist
+    fun getRightDistance(): Double = rightDist
+    fun getHeading(): Double = theta
+    fun getHeadingInDegrees(): Double = theta / Math.PI * 180
 }

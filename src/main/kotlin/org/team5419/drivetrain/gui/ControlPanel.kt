@@ -12,13 +12,7 @@ import javax.swing.border.EmptyBorder
 class ControlPanel(renderer: Renderer): JPanel() {
 
     private val gbc = GridBagConstraints()
-    private val xLabel: JLabel
-    private val yLabel: JLabel
-    private val velLabel: JLabel
-    private val thetaLabel: JLabel
-    private val leftLabel: JLabel
-    private val rightLabel: JLabel
-
+    private val labels: Map<JLabel, () -> Double>
     private val zoomInButton: JButton = JButton("+").apply{
         addActionListener { renderer.zoomIn() }
         setOpaque(true)
@@ -32,12 +26,15 @@ class ControlPanel(renderer: Renderer): JPanel() {
         this.layout = GridLayout(20, 1, 5, 5);
         this.preferredSize = Dimension(180, 0)
         gbc.anchor = GridBagConstraints.NORTH;
-        xLabel = addOutput("X: ")
-        yLabel = addOutput("Y: ")
-        velLabel = addOutput("Velocity: ")
-        thetaLabel = addOutput("θ: ")
-        leftLabel = addOutput("Left: ")
-        rightLabel = addOutput("Right: ")
+
+        labels = mapOf<JLabel, () -> Double>(
+            addOutput("X: ") to { Robot.x },
+            addOutput("Y: ") to { Robot.y },
+            addOutput("Velocity : ") to { Robot.velocity },
+            addOutput("θ: ") to { Robot.getHeadingInDegrees() },
+            addOutput("Left: ") to { Robot.leftWheel },
+            addOutput("Right: ") to { Robot.rightWheel }
+        )
 
         this.add(JPanel().apply {
             layout = GridLayout(1,2, 10, 10)
@@ -61,11 +58,6 @@ class ControlPanel(renderer: Renderer): JPanel() {
     }
 
     fun update() {
-        xLabel.setText("%.${3}f".format(Robot.x))
-        yLabel.setText("%.${3}f".format(Robot.y))
-        velLabel.setText("%.${3}f".format(Robot.velocity))
-        thetaLabel.setText("%.${3}f".format(Robot.theta / Math.PI * 180))
-        leftLabel.setText("%.${3}f".format(Robot.leftWheel))
-        rightLabel.setText("%.${3}f".format(Robot.rightWheel))
+        labels.forEach { (label, callback) -> label.text = "%.${3}f".format(callback())}
     }
 }
