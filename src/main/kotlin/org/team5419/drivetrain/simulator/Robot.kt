@@ -13,15 +13,11 @@ object Robot : AbstractRobot(
     //use getRightDistance(): Double to read the distance traveled by the left wheel
     //use getHeading(): Double to read the robot's heading in radians
 
-    private val pid = PID(0.1, 0.0, 0.000)
-    private const val target = Math.PI
-
     override fun robotInit() {
+        setPercent(1.0, 0.7)
     }
     
     override fun robotPeriodic() {
-        val output = pid.calculate(target - getHeading(), dt)
-        setPercent(output, -output)
     }
 
 }

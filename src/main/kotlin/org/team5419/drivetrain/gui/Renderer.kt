@@ -1,46 +1,36 @@
 package org.team5419.drivetrain.gui
 
-import javax.swing.JPanel
-
-
-import java.awt.Graphics
-import java.awt.Graphics2D
-import java.awt.Color
-import java.awt.BasicStroke
-import java.awt.RenderingHints
-import java.awt.Dimension
-import java.awt.event.MouseMotionListener
-import java.awt.event.MouseListener
-import java.awt.event.MouseEvent
-import java.awt.Point
 
 import org.team5419.drivetrain.simulator.Robot
+import java.awt.*
+import java.awt.event.MouseEvent
+import java.awt.event.MouseListener
+import java.awt.event.MouseMotionListener
+import javax.swing.JPanel
 import kotlin.math.cos
 import kotlin.math.sin
 
 class Renderer: JPanel(), MouseListener, MouseMotionListener {
 
-    var radius = 5
+    private var radius = 5
 
-    val pastPoints = mutableListOf<Pair<Int, Int>>()
-    val framesPerPoint = 10
-    var framesSincePoint = 0 
-    val maxPastPoints = 300
+    private val pastPoints = mutableListOf<Pair<Double, Double>>()
+    private val framesPerPoint = 1
+    private var framesSincePoint = 0
+    private val maxPastPoints = 3000
 
 
-    var initialSize: Dimension = this.getSize()
-    var hasPainted = false
-    var startDrag: Point? = null
+    private var startDrag: Point? = null
 
     private var zoomLevel = 1.0
         set(value) {
             field = value
             println(value)
         }
-    val zoomIncrement = 0.85f
+    private val zoomIncrement = 0.85f
 
-    var xOffset = 0.0
-    var yOffset = 0.0
+    private var xOffset = 0.0
+    private var yOffset = 0.0
 
 
     init{
@@ -67,9 +57,8 @@ class Renderer: JPanel(), MouseListener, MouseMotionListener {
     }
 
     override fun mouseDragged(e: MouseEvent) {
-        // println("drag")
-        xOffset += e.point.x - startDrag!!.x
-        yOffset += e.point.y - startDrag!!.y
+        xOffset += ((e.point.x - startDrag!!.x) / zoomLevel).toInt()
+        yOffset += ((e.point.y - startDrag!!.y) / zoomLevel).toInt()
         startDrag = e.point
 
     }
@@ -84,14 +73,14 @@ class Renderer: JPanel(), MouseListener, MouseMotionListener {
 
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
 
-        g.stroke = BasicStroke(2f)
+        g.stroke = BasicStroke(zoomLevel.toFloat() * 2f)
         g.color = Color.WHITE
         g.fillRect(0, 0, width, height)
 
         framesSincePoint++
 
         if(framesSincePoint == framesPerPoint){
-            pastPoints.add(Pair(Robot.x.toInt(), Robot.y.toInt()))
+            pastPoints.add(Robot.x to Robot.y)
             framesSincePoint = 0
 
             if(pastPoints.size >= maxPastPoints){
@@ -99,7 +88,12 @@ class Renderer: JPanel(), MouseListener, MouseMotionListener {
             }
         }
         g.color = Color.decode("#008000")
-        pastPoints.zipWithNext { a,b -> g.drawLine(a.first, a.second, b.first, b.second) }
+        pastPoints.zipWithNext { a,b -> g.drawLine(
+            ((a.first + xOffset) * zoomLevel).toInt(),
+            ((a.second + yOffset) * zoomLevel).toInt(),
+            ((b.first + xOffset) * zoomLevel).toInt(),
+            ((b.second + yOffset) * zoomLevel).toInt()
+        )}
 
         g.color = Color.decode("#990000")
 
