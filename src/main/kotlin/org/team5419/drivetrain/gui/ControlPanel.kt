@@ -19,9 +19,14 @@ class ControlPanel(renderer: Renderer): JPanel() {
     private val leftLabel: JLabel
     private val rightLabel: JLabel
 
-    private val zoomInButton: JButton = JButton("+")
-    private val zoomOutButton: JButton = JButton("-")
-
+    private val zoomInButton: JButton = JButton("+").apply{
+        addActionListener { renderer.zoomIn() }
+        setOpaque(true)
+    }
+    private val zoomOutButton: JButton = JButton("-").apply {
+        addActionListener { renderer.zoomOut() }
+        setOpaque(true)
+    }
 
     init{
         this.layout = GridLayout(20, 1, 5, 5);
@@ -41,15 +46,6 @@ class ControlPanel(renderer: Renderer): JPanel() {
         })
 
         update()
-
-        zoomOutButton.addActionListener {
-            renderer.zoomOut()
-        }
-
-        zoomInButton.addActionListener {
-            renderer.zoomIn()
-        }
-
     }
 
     private fun addOutput(titleStr: String): JLabel{
