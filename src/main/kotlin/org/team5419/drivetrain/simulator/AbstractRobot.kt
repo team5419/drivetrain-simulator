@@ -1,6 +1,9 @@
 package org.team5419.drivetrain.simulator
 
-import kotlin.math.*
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.sign
+import kotlin.math.sin
 
 abstract class AbstractRobot (
     val wheelBase: Double, //pixels
@@ -18,6 +21,9 @@ abstract class AbstractRobot (
     private var targetVelocity: Double = 0.0
     var velocity: Double = 0.0
 
+
+    var leftPercent: Double = 0.0
+    var rightPercent: Double = 0.0
     var leftWheel: Double = 0.0
     var rightWheel: Double = 0.0
 
@@ -34,31 +40,33 @@ abstract class AbstractRobot (
 
     protected final fun setPercent(left: Double, right: Double){
 
-        leftWheel = left.coerceIn(-1.0, 1.0)
-        rightWheel = right.coerceIn(-1.0, 1.0)
+        leftPercent = left.coerceIn(-1.0, 1.0)
+        rightPercent = right.coerceIn(-1.0, 1.0)
 
-        targetVelocity = (leftWheel + rightWheel) / 2 * maxVelocity
-
-        if(leftWheel == rightWheel) {
-            dtheta = 0.0
-        } else if(rightWheel == -leftWheel) {
-            dtheta = leftWheel * maxVelocity / wheelBase * dt
-        } else if(leftWheel != rightWheel) {
-            val r = wheelBase * (leftWheel + rightWheel) / 2 / abs(leftWheel - rightWheel) //turn radius
-            val dist = targetVelocity * dt
-            val h = sqrt(r*r - dist*dist/4)
-            dtheta = 2 * atan(dist/2/h)
-
-        }
     }
 
     final fun update() {
         robotPeriodic()
 
-        theta += dtheta
-        theta %= (Math.PI * 2)
+        leftWheel += acceleration.coerceAtMost(abs(leftPercent - leftWheel)) * dt * sign(leftPercent - leftWheel)
+        rightWheel += acceleration.coerceAtMost(abs(rightPercent - rightWheel)) * dt * sign(rightPercent - rightWheel)
 
-        velocity += acceleration.coerceAtMost(abs(targetVelocity - velocity)) * dt * sign(targetVelocity - velocity)
+        theta += when {
+            leftWheel == rightWheel -> 0.0;
+            rightWheel == -leftWheel -> leftWheel * maxVelocity / wheelBase * dt
+            leftWheel != rightWheel -> {
+                val r = wheelBase * (leftWheel + rightWheel) / 2 / abs(leftWheel - rightWheel) //turn radius
+                dtheta = velocity
+                val dist = targetVelocity * dt
+                val h = sqrt(r*r - dist*dist/4)
+                return 2 * atan(dist/2/h)
+
+            }
+            else -> 0.0
+        }
+
+
+        theta %= (Math.PI * 2)
         velocity = velocity.coerceIn(-maxVelocity, maxVelocity)
 
         x += sin(theta) * velocity * dt
