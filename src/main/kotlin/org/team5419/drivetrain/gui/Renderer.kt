@@ -24,7 +24,7 @@ class Renderer: JPanel(), MouseListener, MouseMotionListener, MouseWheelListener
 
     private var yOffset = 0.0
     private var xOffset = 0.0
-    private var startDrag: Point? = null
+    private var startDrag: Point = Point()
 
 
     init{
@@ -64,13 +64,13 @@ class Renderer: JPanel(), MouseListener, MouseMotionListener, MouseWheelListener
     private fun drawTrail(g: Graphics2D){
         framesSincePoint++
 
-        if(framesSincePoint == framesPerPoint){
+        if(framesSincePoint >= framesPerPoint && Robot.velocity != 0.0){
+            println("add point")
             pastPoints.add(Robot.x to Robot.y)
             framesSincePoint = 0
 
             if(pastPoints.size >= maxPastPoints) pastPoints.removeAt(0)
         }
-
         g.color = Color.decode("#008000")
         pastPoints.zipWithNext { a,b -> g.drawLine(
             ((a.first + xOffset) * zoomLevel).toInt(),
@@ -101,18 +101,16 @@ class Renderer: JPanel(), MouseListener, MouseMotionListener, MouseWheelListener
     override fun mouseMoved(e: MouseEvent){}
     override fun mouseEntered(e: MouseEvent){}
     override fun mouseClicked(e: MouseEvent){}
+    override fun mouseReleased(e: MouseEvent) {}
     override fun mouseExited(e: MouseEvent){}
     override fun mousePressed(e: MouseEvent) {
         startDrag = e.getPoint()
     }
     override fun mouseDragged(e: MouseEvent) {
-        xOffset += ((e.point.x - startDrag!!.x) / zoomLevel).toInt()
-        yOffset += ((e.point.y - startDrag!!.y) / zoomLevel).toInt()
+        xOffset += ((e.point.x - startDrag.x) / zoomLevel).toInt()
+        yOffset += ((e.point.y - startDrag.y) / zoomLevel).toInt()
         startDrag = e.point
         repaint()
-    }
-    override fun mouseReleased(e: MouseEvent){
-        startDrag = null
     }
 
     override fun mouseWheelMoved(e: MouseWheelEvent?) {
