@@ -50,24 +50,24 @@ abstract class AbstractRobot (
 
         leftWheel += acceleration.coerceAtMost(abs(leftPercent - leftWheel)) * dt * sign(leftPercent - leftWheel)
         rightWheel += acceleration.coerceAtMost(abs(rightPercent - rightWheel)) * dt * sign(rightPercent - rightWheel)
+        velocity = (leftWheel + rightWheel) / 2 * maxVelocity
+        velocity = velocity.coerceIn(-maxVelocity, maxVelocity)
 
-        theta += when {
-            leftWheel == rightWheel -> 0.0;
-            rightWheel == -leftWheel -> leftWheel * maxVelocity / wheelBase * dt
-            leftWheel != rightWheel -> {
-                val r = wheelBase * (leftWheel + rightWheel) / 2 / abs(leftWheel - rightWheel) //turn radius
-                dtheta = velocity
-                val dist = targetVelocity * dt
-                val h = sqrt(r*r - dist*dist/4)
-                return 2 * atan(dist/2/h)
-
-            }
-            else -> 0.0
+        if(leftWheel == rightWheel){
+            theta += 0.0
+        } else if(rightWheel == -leftWheel){
+            theta += leftWheel * maxVelocity / wheelBase * dt
+        } else {
+            val r = wheelBase * (leftWheel + rightWheel) / 2 / abs(leftWheel - rightWheel) //turn radius
+            val dist = velocity * dt
+            theta += dist / r
+            //val h = sqrt(r*r - dist*dist/4)
+            //theta += 2 * atan(dist/2/h)
         }
 
 
         theta %= (Math.PI * 2)
-        velocity = velocity.coerceIn(-maxVelocity, maxVelocity)
+
 
         x += sin(theta) * velocity * dt
         y += cos(theta) * velocity * dt

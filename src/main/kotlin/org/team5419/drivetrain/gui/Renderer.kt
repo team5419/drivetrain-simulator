@@ -65,7 +65,6 @@ class Renderer: JPanel(), MouseListener, MouseMotionListener, MouseWheelListener
         framesSincePoint++
 
         if(framesSincePoint >= framesPerPoint && Robot.velocity != 0.0){
-            println("add point")
             pastPoints.add(Robot.x to Robot.y)
             framesSincePoint = 0
 

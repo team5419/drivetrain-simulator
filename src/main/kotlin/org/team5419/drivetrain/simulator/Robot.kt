@@ -2,7 +2,7 @@ package org.team5419.drivetrain.simulator
 
 object Robot : AbstractRobot(
     wheelBase = 20.0,
-    maxVelocity = 30.0,
+    maxVelocity = 50.0,
     acceleration = 5.0,
     startX = 300.0,
     startY = 300.0
@@ -13,11 +13,17 @@ object Robot : AbstractRobot(
     //use getRightDistance(): Double to read the distance traveled by the left wheel
     //use getHeading(): Double to read the robot's heading in radians
 
+    var loopNum: Int = 0
+
     override fun robotInit() {
-        setPercent(1.0, 0.7)
+        setPercent(1.0, 0.0)
     }
     
     override fun robotPeriodic() {
+        setPercent(1.0, Math.sqrt(0.001 * loopNum))
+
+        loopNum++
+        
     }
 
 }
